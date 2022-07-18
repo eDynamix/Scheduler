@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">OS-0 Scheduler</string>
+    <string name="create_new">Create New</string>
+    <string name="back">Back</string>
+    <string name="enter_title">Enter title...</string>
+    <string name="enter_description">Enter description...</string>
+    <string name="pick_date">Pick date</string>
+    <string name="done">done</string>
+</resources>
