@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -40,7 +41,9 @@ public class CreateScheduleItemActivity extends AppCompatActivity {
                         timePicker();
                     }
                 }, mYear, mMonth, mDay);
-        // TODO: Set min date
+        // Hope this works
+        SharedPreferences sp = getSharedPreferences("Clock", MODE_PRIVATE);
+        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - sp.getLong("mss", -1));
         datePickerDialog.show();
     }
     private void timePicker(){
@@ -113,9 +116,15 @@ public class CreateScheduleItemActivity extends AppCompatActivity {
             }
             // Add new item
             else {
-                items.add(new ScheduleItem(title.getText().toString().trim(),
-                          desc.getText().toString().trim(),
-                          mYear, mMonth, mDay, mHour, mMinute));
+                if(mYear == 0 && mMonth == 0 && mDay == 0 && mHour == 0 && mMinute == 0) {
+                    datePicker();
+                    return;
+                }
+                else {
+                    items.add(new ScheduleItem(title.getText().toString().trim(),
+                            desc.getText().toString().trim(),
+                            mYear, mMonth, mDay, mHour, mMinute));
+                }
             }
             // Serialize and send back
             String json = gson.toJson(items);
