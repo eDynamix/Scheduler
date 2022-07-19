@@ -4,19 +4,19 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-public class ListItem implements Serializable {
+public class ScheduleItem implements Serializable {
     private String title, description;
     private int year, month, day, hours, minutes;
 
-    public ListItem() {}
-    public ListItem(int year, int month, int day, int hours, int minutes) {
+    public ScheduleItem() {}
+    public ScheduleItem(int year, int month, int day, int hours, int minutes) {
         this.year = year;
         this.month = month;
         this.day = day;
         this.hours = hours;
         this.minutes = minutes;
     }
-    public ListItem(String title, String description, int year, int month, int day, int hours, int minutes) {
+    public ScheduleItem(String title, String description, int year, int month, int day, int hours, int minutes) {
         this(year, month, day, hours, minutes);
         this.title = title;
         this.description = description;

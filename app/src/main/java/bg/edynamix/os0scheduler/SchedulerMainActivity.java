@@ -1,6 +1,5 @@
 package bg.edynamix.os0scheduler;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
@@ -8,9 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,8 +25,8 @@ import java.util.Comparator;
 
 public class SchedulerMainActivity extends AppCompatActivity {
 
-    private ArrayList<ListItem> items;
-    private ArrayAdapter<ListItem> adapter;
+    private ArrayList<ScheduleItem> items;
+    private ArrayAdapter<ScheduleItem> adapter;
     private boolean editMode = false;
 
     private void init() {
@@ -37,14 +34,14 @@ public class SchedulerMainActivity extends AppCompatActivity {
         items = new ArrayList<>();
         loadData();
         // Initialize adapter and override a method to customize ListView format
-        adapter = new ArrayAdapter<ListItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1, items) {
+        adapter = new ArrayAdapter<ScheduleItem>(this, android.R.layout.simple_list_item_2, android.R.id.text1, items) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 // Set titles and dates to corresponding elements of ListView
                 TextView scheduleTitle = view.findViewById(android.R.id.text1);
                 TextView scheduleDate =  view.findViewById(android.R.id.text2);
-                ListItem item = getItem(position);
+                ScheduleItem item = getItem(position);
                 scheduleTitle.setText(item.getTitle());
                 scheduleDate.setText(item.getFormattedDate());
                 return view;
@@ -58,7 +55,7 @@ public class SchedulerMainActivity extends AppCompatActivity {
         Gson gson = new Gson();
         if(sp.contains("schedule list")) {
             String json = sp.getString("schedule list", null);
-            Type type = new TypeToken<ArrayList<ListItem>>(){}.getType();
+            Type type = new TypeToken<ArrayList<ScheduleItem>>(){}.getType();
             items = gson.fromJson(json, type);
         } else {
             // Only if app is started for the first time ever
@@ -125,7 +122,7 @@ public class SchedulerMainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 editMode = true;
-                ListItem item = (ListItem) lv.getItemAtPosition(pos);
+                ScheduleItem item = (ScheduleItem) lv.getItemAtPosition(pos);
                 Intent intent = new Intent(SchedulerMainActivity.this, CreateScheduleItemActivity.class);
                 Gson gson = new Gson();
                 String json = gson.toJson(items);
@@ -145,10 +142,10 @@ public class SchedulerMainActivity extends AppCompatActivity {
         if(resultCode >= 1000) {
             Gson gson = new Gson();
             String json = data.getStringExtra("jsonBack");
-            Type type=new TypeToken<ArrayList<ListItem>>(){}.getType();
+            Type type=new TypeToken<ArrayList<ScheduleItem>>(){}.getType();
             items = gson.fromJson(json, type);
             // Sort Ascending
-            items.sort(Comparator.comparing(ListItem::getDate));
+            items.sort(Comparator.comparing(ScheduleItem::getDate));
             saveData();
             loadData();
             // Update ListView

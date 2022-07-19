@@ -2,17 +2,13 @@ package bg.edynamix.os0scheduler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ScrollView;
-import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.google.gson.Gson;
@@ -21,7 +17,6 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 public class CreateScheduleItemActivity extends AppCompatActivity {
 
@@ -76,9 +71,9 @@ public class CreateScheduleItemActivity extends AppCompatActivity {
             EditText desc = findViewById(R.id.scheduleDesc);
             Button date = findViewById(R.id.schedulerDatePicker);
             Gson gson = new Gson();
-            Type type=new TypeToken<ArrayList<ListItem>>(){}.getType();
-            ArrayList<ListItem> items = gson.fromJson(getIntent().getStringExtra("json"), type);
-            ListItem item = items.get(getIntent().getIntExtra("pos", -1));
+            Type type=new TypeToken<ArrayList<ScheduleItem>>(){}.getType();
+            ArrayList<ScheduleItem> items = gson.fromJson(getIntent().getStringExtra("json"), type);
+            ScheduleItem item = items.get(getIntent().getIntExtra("pos", -1));
             title.setText(item.getTitle());
             desc.setText(item.getDescription());
             date.setText(date.getText() + "\n" + item.getFormattedDate());
@@ -102,8 +97,8 @@ public class CreateScheduleItemActivity extends AppCompatActivity {
         findViewById(R.id.schedulerDone).setOnClickListener(view ->  {
             // Retrieve list
             Gson gson = new Gson();
-            Type type=new TypeToken<ArrayList<ListItem>>(){}.getType();
-            ArrayList<ListItem> items = gson.fromJson(getIntent().getStringExtra("json"), type);
+            Type type=new TypeToken<ArrayList<ScheduleItem>>(){}.getType();
+            ArrayList<ScheduleItem> items = gson.fromJson(getIntent().getStringExtra("json"), type);
             EditText title = findViewById(R.id.scheduleTitle);
             EditText desc = findViewById(R.id.scheduleDesc);
             if(items == null) {
@@ -112,13 +107,13 @@ public class CreateScheduleItemActivity extends AppCompatActivity {
             // Edit item
             if(getIntent().getExtras().size() == 3) {
                 int pos = getIntent().getIntExtra("pos", -1);
-                items.set(pos, new ListItem(title.getText().toString().trim(),
+                items.set(pos, new ScheduleItem(title.getText().toString().trim(),
                           desc.getText().toString().trim(),
                           mYear, mMonth, mDay, mHour, mMinute));
             }
             // Add new item
             else {
-                items.add(new ListItem(title.getText().toString().trim(),
+                items.add(new ScheduleItem(title.getText().toString().trim(),
                           desc.getText().toString().trim(),
                           mYear, mMonth, mDay, mHour, mMinute));
             }
