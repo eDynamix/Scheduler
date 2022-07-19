@@ -147,10 +147,10 @@ public class SchedulerMainActivity extends AppCompatActivity {
             String json = data.getStringExtra("jsonBack");
             Type type=new TypeToken<ArrayList<ListItem>>(){}.getType();
             items = gson.fromJson(json, type);
-            saveData();
-            loadData();
             // Sort Ascending
             items.sort(Comparator.comparing(ListItem::getDate));
+            saveData();
+            loadData();
             // Update ListView
             adapter.clear();
             adapter.addAll(items);
